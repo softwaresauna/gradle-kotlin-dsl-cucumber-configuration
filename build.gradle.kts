@@ -1,7 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    jacoco
     kotlin("jvm") version "1.5.21"
 }
 
@@ -20,7 +19,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    testImplementation("io.cucumber:cucumber-java:6.11.0")
+    implementation("io.cucumber:cucumber-java:6.11.0")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 }
 
@@ -38,25 +37,13 @@ tasks.withType<KotlinCompile> {
 task("cucumber") {
     dependsOn("assemble", "compileTestJava")
     doLast {
+
         javaexec {
             mainClass.set("io.cucumber.core.cli.Main")
             classpath = cucumberRuntime + sourceSets.main.get().output + sourceSets.test.get().output
             // Change glue for your project package where the step definitions are.
             // And where the feature files are.
-            args = listOf("--plugin", "pretty", "--glue", "com.example.feature", "src/test/resources")
-            // Configure jacoco agent for the test coverage.
-            val jacocoAgent = zipTree(configurations.jacocoAgent.get().singleFile)
-                .filter { it.name == "jacocoagent.jar" }
-                .singleFile
-            jvmArgs = listOf("-javaagent:$jacocoAgent=destfile=$buildDir/results/jacoco/cucumber.exec,append=false")
+            args = listOf("--plugin", "pretty", "--glue", "com.example.feature", "src/main/resources")
         }
-    }
-}
-
-tasks.jacocoTestReport {
-    // Give jacoco the file generated with the cucumber testes for the coverage.
-    executionData(files("$buildDir/jacoco/test.exec", "$buildDir/results/jacoco/cucumber.exec"))
-    reports {
-        xml.required.set(true)
     }
 }
