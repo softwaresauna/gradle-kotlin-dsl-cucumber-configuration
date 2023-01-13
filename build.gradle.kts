@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("io.cucumber:cucumber-java:6.11.0")
+    implementation("io.cucumber:cucumber-java:7.11.0")
     implementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 }
